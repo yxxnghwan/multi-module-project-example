@@ -6,10 +6,12 @@ plugins {
 	kotlin("jvm") version "1.8.22"
 	kotlin("plugin.spring") version "1.8.22"
 	kotlin("plugin.jpa") version "1.8.22"
+	kotlin("kapt") version "1.8.22"
 }
 
 group = "com.example"
 version = "0.0.1-SNAPSHOT"
+val querydslVersion = "5.0.0"
 
 java {
 	sourceCompatibility = JavaVersion.VERSION_17
@@ -26,6 +28,10 @@ dependencies {
 	implementation("org.jetbrains.kotlin:kotlin-reflect")
 	runtimeOnly("com.h2database:h2")
 	testImplementation("org.springframework.boot:spring-boot-starter-test")
+
+	//querydsl
+	implementation("com.querydsl:querydsl-jpa:$querydslVersion:jakarta")
+	kapt("com.querydsl:querydsl-apt:${querydslVersion}:jakarta")
 }
 
 tasks.withType<KotlinCompile> {
