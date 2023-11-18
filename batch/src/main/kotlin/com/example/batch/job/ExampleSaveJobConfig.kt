@@ -11,20 +11,26 @@ import org.springframework.batch.core.repository.JobRepository
 import org.springframework.batch.core.step.builder.StepBuilder
 import org.springframework.batch.core.step.tasklet.Tasklet
 import org.springframework.batch.repeat.RepeatStatus
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.transaction.PlatformTransactionManager
 
 @Configuration
+@ConditionalOnProperty(name = ["spring.batch.job.names"], havingValue = ExampleSaveJobConfig.JOB_NAME)
 class ExampleSaveJobConfig(
     private val exampleSaveService: ExampleSaveService,
     private val jobRepository: JobRepository,
     private val platformTransactionManager: PlatformTransactionManager,
 ) {
 
+    companion object {
+        const val JOB_NAME = "saveExampleJob"
+    }
+
     @Bean
     fun saveExampleJob(): Job {
-        return JobBuilder("saveExampleJob", jobRepository)
+        return JobBuilder(JOB_NAME, jobRepository)
             .incrementer(RunIdIncrementer())
             .start(saveExampleStep())
             .build()
